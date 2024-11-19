@@ -3,32 +3,33 @@ const googleSheetsApiUrl = 'https://script.google.com/macros/s/AKfycbyqrC8P2Ml9D
 fetch(googleSheetsApiUrl)
   .then(response => response.json())
   .then(data => {
-    // Log the data to make sure it's being retrieved properly
-    console.log(data); 
-
-    // For each hotel, display the image using the CORS proxy
+    // Log the entire response for debugging
+    console.log(data); // Check if image URL is correctly retrieved
     data.forEach(hotel => {
-      const imageUrl = hotel['image[0].url']; // Ensure the field name matches the column in Google Sheets
+      // Access the image URL using bracket notation
+      const imageUrl = hotel['image[0].url']; // Bracket notation to handle the key with square brackets
+      console.log('Hotel Image URL:', imageUrl); // Log image URL to ensure correct value
+      
       if (imageUrl) {
-        useCORSProxy(imageUrl);
+        useCORSProxy(imageUrl); // Call the CORS proxy function if the image URL is found
       } else {
-        console.log('No image URL for hotel:', hotel.name);
+        console.log('No image URL found for hotel:', hotel.name);
       }
     });
   })
   .catch(error => console.error('Error fetching hotel data:', error));
 
-// Function to proxy the image URL using CORS Anywhere
+// Function to proxy the image URL using a CORS proxy service
 function useCORSProxy(imageUrl) {
-  const corsProxy = 'https://api.allorigins.win/get?url=';
-  const proxiedUrl = corsProxy + encodeURIComponent(imageUrl); // URL encode the image URL
+  const corsProxy = 'https://api.allorigins.win/get?url='; // Using allorigins as the CORS proxy
+  const proxiedUrl = corsProxy + encodeURIComponent(imageUrl); // Add CORS proxy prefix
 
-  // Dynamically create an image element and append it to the DOM
+  // Dynamically create an image element
   const img = document.createElement('img');
-  img.src = proxiedUrl;
+  img.src = proxiedUrl; // Use the proxied URL for the image source
   img.alt = 'Hotel Image';
-  img.style.width = '300px';  // Adjust size as needed
+  img.style.width = '300px';  // Adjust image size
   img.style.margin = '10px';  // Add some margin for spacing
-  
-  document.body.appendChild(img); // Append to the body or any container
+
+  document.body.appendChild(img); // Append image to the document body or any container
 }
