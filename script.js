@@ -1,6 +1,5 @@
-const API_URL = 'https://script.google.com/macros/s/AKfycbyqrC8P2Ml9DJZlatJWruqW15V0SUolUcQRDBRkqet6fNlMaga-JhKAAPokNv06x8Q/exec';
+const API_URL = '/api/data'; // API endpoint to fetch data from
 
-// Fetch data from Google Apps Script API
 async function fetchData() {
     try {
         const response = await fetch(API_URL);
@@ -13,7 +12,6 @@ async function fetchData() {
     }
 }
 
-// Draw dynamic banner on canvas
 function drawBanner(data) {
     const canvas = document.getElementById('bannerCanvas');
     const ctx = canvas.getContext('2d');
@@ -29,7 +27,7 @@ function drawBanner(data) {
     const image = new Image();
     image.crossOrigin = 'anonymous'; // Avoid CORS issues
     image.onload = () => {
-        ctx.drawImage(image, 0, 0, 400, 400); // Draw on the left side
+        ctx.drawImage(image, 0, 0, 400, 400); // Draw image
 
         // Add text overlay
         ctx.fillStyle = '#333';
@@ -55,7 +53,6 @@ function drawBanner(data) {
     image.src = data['image[0].url'];
 }
 
-// Initialize and fetch data
 (async function init() {
     const data = await fetchData();
     if (data && data.length > 0) {
