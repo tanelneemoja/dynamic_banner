@@ -1,3 +1,5 @@
+const googleSheetsApiUrl = 'https://script.google.com/macros/s/AKfycbyqrC8P2Ml9DJZlatJWruqW15V0SUolUcQRDBRkqet6fNlMaga-JhKAAPokNv06x8Q/exec';
+
 fetch(googleSheetsApiUrl)
   .then(response => response.json())
   .then(data => {
@@ -11,15 +13,15 @@ fetch(googleSheetsApiUrl)
 
 // Function to proxy the image URL using CORS Anywhere
 function useCORSProxy(imageUrl) {
-    const corsProxy = 'https://api.allorigins.win/get?url=';
-    const proxiedUrl = corsProxy + encodeURIComponent(imageUrl); // URL encode the image URL
-    
-    // Dynamically create an image element and append it to the DOM
-    const img = document.createElement('img');
-    img.src = proxiedUrl;
-    img.alt = 'Hotel Image';
-    img.style.width = '300px';  // Adjust size as needed
-    img.style.margin = '10px';  // Add some margin for spacing
-    
-    document.body.appendChild(img); // Append to the body or any container
-  }
+  const corsProxy = 'https://api.allorigins.win/get?url=';
+  const proxiedUrl = corsProxy + encodeURIComponent(imageUrl); // URL encode the image URL
+  
+  // Dynamically create an image element and append it to the DOM
+  const img = document.createElement('img');
+  img.src = proxiedUrl;
+  img.alt = 'Hotel Image';
+  img.style.width = '300px';  // Adjust size as needed
+  img.style.margin = '10px';  // Add some margin for spacing
+  
+  document.body.appendChild(img); // Append to the body or any container
+}
