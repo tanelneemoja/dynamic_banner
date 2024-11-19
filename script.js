@@ -1,63 +1,34 @@
-const API_URL = '/api/data'; // API endpoint to fetch data from
+const apiUrl = "https://script.google.com/macros/s/AKfycbyqrC8P2Ml9DJZlatJWruqW15V0SUolUcQRDBRkqet6fNlMaga-JhKAAPokNv06x8Q/exec";
 
-async function fetchData() {
-    try {
-        const response = await fetch(API_URL);
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return await response.json();
-    } catch (error) {
-        console.error('Error fetching data:', error);
-    }
-}
+fetch(apiUrl)
+  .then(response => response.json())
+  .then(data => {
+    // Loop through the data and generate dynamic banners
+    data.forEach(hotel => {
+      const banner = document.createElement('div');
+      banner.classList.add('banner');
 
-function drawBanner(data) {
-    const canvas = document.getElementById('bannerCanvas');
-    const ctx = canvas.getContext('2d');
+      // Create the image element
+      const img = document.createElement('img');
+      img.src = hotel.image_url;  // Use the image URL from the data
+      img.alt = hotel.name;
 
-    // Clear canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Add hotel information text
+      const hotelInfo = document.createElement('div');
+      hotelInfo.classList.add('hotel-info');
+      hotelInfo.innerHTML = `
+        <h2>${hotel.name}</h2>
+        <p>Rating: ${hotel.star_rating} Stars</p>
+        <p>Price: $${hotel.base_price}</p>
+        <p>${hotel.address.city}, ${hotel.address.country}</p>
+      `;
 
-    // Background
-    ctx.fillStyle = '#f8f9fa';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // Append the image and hotel info to the banner
+      banner.appendChild(img);
+      banner.appendChild(hotelInfo);
 
-    // Draw hotel image
-    const image = new Image();
-    image.crossOrigin = 'anonymous'; // Avoid CORS issues
-    image.onload = () => {
-        ctx.drawImage(image, 0, 0, 400, 400); // Draw image
-
-        // Add text overlay
-        ctx.fillStyle = '#333';
-        ctx.font = '24px Arial';
-        ctx.fillText(data.name, 420, 50); // Hotel name
-        ctx.font = '18px Arial';
-        ctx.fillText(`Price: $${data.base_price}`, 420, 100); // Price
-        ctx.fillText(`Rating: ${data.star_rating} Stars`, 420, 150); // Star rating
-
-        // Add address
-        ctx.font = '16px Arial';
-        ctx.fillText(`${data.address.city}, ${data.address.country}`, 420, 200);
-
-        // Add download button functionality
-        const downloadButton = document.getElementById('downloadButton');
-        downloadButton.onclick = () => {
-            const link = document.createElement('a');
-            link.download = `${data.name}_banner.png`;
-            link.href = canvas.toDataURL();
-            link.click();
-        };
-    };
-    image.src = data['image[0].url'];
-}
-
-(async function init() {
-    const data = await fetchData();
-    if (data && data.length > 0) {
-        drawBanner(data[0]); // Render the first hotel banner
-    } else {
-        console.error('No data available or fetch failed.');
-    }
-})();
+      // Add the banner to the page (e.g., to a container with ID 'banners')
+      document.getElementById('banners').appendChild(banner);
+    });
+  })
+  .catch(error => console.error('Error fetching data:', error));
