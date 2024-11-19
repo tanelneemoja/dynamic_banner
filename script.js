@@ -13,18 +13,14 @@ fetch(googleSheetsApiUrl)
 
 // Function to proxy the image URL using CORS Anywhere
 function useCORSProxy(imageUrl) {
-  const corsProxy = 'https://cors-anywhere.herokuapp.com/'; // CORS Anywhere proxy service
-  const proxiedUrl = corsProxy + imageUrl; // Add the CORS proxy prefix
+  const corsProxy = 'https://thingproxy.freeboard.io/fetch/';
+const imageUrl = 'https://s.tez-tour.com/hotel/19106/content_hotel_5cc845744eafe8_38414159_5416.jpg';
+const proxiedUrl = corsProxy + encodeURIComponent(imageUrl);
 
-  console.log('Proxied Image URL:', proxiedUrl); // Log the proxied URL to check
+const img = document.createElement('img');
+img.src = proxiedUrl;
+img.alt = 'Hotel Image';
+img.style.width = '300px'; 
+img.style.margin = '10px';  
 
-  // Dynamically create an image element
-  const img = document.createElement('img');
-  img.src = proxiedUrl; // Use the proxied URL
-  img.alt = 'Hotel Image';
-  img.style.width = '300px';  // Adjust size as needed
-  img.style.margin = '10px';  // Add some margin for spacing
-  
-  // Append the image to the body or any container in the page
-  document.body.appendChild(img); // Or use a specific container, e.g., document.getElementById('image-container')
-}
+document.body.appendChild(img);
