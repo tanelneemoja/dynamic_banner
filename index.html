@@ -1,31 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Banner</title>
-    <style>
-        canvas {
-            border: 1px solid #ccc;
-            margin: 20px;
-        }
-        #downloadButton {
-            padding: 10px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        #downloadButton:hover {
-            background-color: #0056b3;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hotel Images</title>
+  <script>
+    // Function to fetch hotel data from Google Sheets (via Web App)
+    function fetchHotelData() {
+      const googleSheetsApiUrl = 'https://script.google.com/macros/s/AKfycbyqrC8P2Ml9DJZlatJWruqW15V0SUolUcQRDBRkqet6fNlMaga-JhKAAPokNv06x8Q/exec'; // Replace with your actual Web App URL
+
+      fetch(googleSheetsApiUrl)
+        .then(response => response.json())
+        .then(data => {
+          // Loop through each hotel in the fetched data
+          data.forEach(hotel => {
+            const imageUrl = hotel["image[0].url"]; // Access the image URL from the data
+            displayImage(imageUrl); // Call function to display the image
+          });
+        })
+        .catch(error => console.error('Error fetching hotel data:', error));
+    }
+
+    // Function to display the image using a CORS proxy
+    function displayImage(imageUrl) {
+      const corsProxy = "https://thingproxy.freeboard.io/fetch/"; // CORS Proxy URL
+
+      // Create the proxied URL by adding the CORS proxy
+      const proxiedUrl = corsProxy + encodeURIComponent(imageUrl);
+
+      // Dynamically create an image element
+      const img = document.createElement('img');
+      img.src = proxiedUrl; // Use the proxied URL for the image source
+      img.alt = 'Hotel Image';
+      img.style.width = '300px';  // Adjust the size as needed
+      img.style.margin = '10px';  // Add some margin for spacing
+
+      // Append the image element to the body or any other container
+      document.body.appendChild(img);
+    }
+
+    // Fetch hotel data and display the images when the page loads
+    window.onload = fetchHotelData;
+  </script>
 </head>
 <body>
-    <h1>Dynamic Hotel Banner</h1>
-    <canvas id="bannerCanvas" width="800" height="400"></canvas>
-    <button id="downloadButton">Download Banner</button>
-
-    <script src="script.js"></script>
+  <h1>Hotel Images</h1>
+  <!-- The images will be added here dynamically -->
 </body>
 </html>
