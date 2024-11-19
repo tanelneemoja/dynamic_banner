@@ -11,7 +11,7 @@ fetch(googleSheetsApiUrl)
   })
   .catch(error => console.error('Error fetching hotel data:', error));
 
-// Function to proxy the image URL using CORS Anywhere
+// Function to proxy the image URL using CORS Anywhere ok
 function useCORSProxy(imageUrl) {
   const corsProxy = 'https://api.allorigins.win/get?url=';
   const proxiedUrl = corsProxy + encodeURIComponent(imageUrl); // URL encode the image URL
