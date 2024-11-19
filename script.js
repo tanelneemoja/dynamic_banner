@@ -1,34 +1,25 @@
-const apiUrl = "https://script.google.com/macros/s/AKfycbyqrC8P2Ml9DJZlatJWruqW15V0SUolUcQRDBRkqet6fNlMaga-JhKAAPokNv06x8Q/exec";
-
-fetch(apiUrl)
+fetch(googleSheetsApiUrl)
   .then(response => response.json())
   .then(data => {
-    // Loop through the data and generate dynamic banners
+    // For each hotel, display the image using the CORS proxy
     data.forEach(hotel => {
-      const banner = document.createElement('div');
-      banner.classList.add('banner');
-
-      // Create the image element
-      const img = document.createElement('img');
-      img.src = hotel.image_url;  // Use the image URL from the data
-      img.alt = hotel.name;
-
-      // Add hotel information text
-      const hotelInfo = document.createElement('div');
-      hotelInfo.classList.add('hotel-info');
-      hotelInfo.innerHTML = `
-        <h2>${hotel.name}</h2>
-        <p>Rating: ${hotel.star_rating} Stars</p>
-        <p>Price: $${hotel.base_price}</p>
-        <p>${hotel.address.city}, ${hotel.address.country}</p>
-      `;
-
-      // Append the image and hotel info to the banner
-      banner.appendChild(img);
-      banner.appendChild(hotelInfo);
-
-      // Add the banner to the page (e.g., to a container with ID 'banners')
-      document.getElementById('banners').appendChild(banner);
+      const imageUrl = hotel.imageUrl; // Get image URL from the data
+      useCORSProxy(imageUrl);
     });
   })
-  .catch(error => console.error('Error fetching data:', error));
+  .catch(error => console.error('Error fetching hotel data:', error));
+
+// Function to proxy the image URL using CORS Anywhere
+function useCORSProxy(imageUrl) {
+  const corsProxy = 'https://cors-anywhere.herokuapp.com/';
+  const proxiedUrl = corsProxy + imageUrl; // Add the CORS proxy prefix
+  
+  // Dynamically create an image element and append it to the DOM
+  const img = document.createElement('img');
+  img.src = proxiedUrl;
+  img.alt = 'Hotel Image';
+  img.style.width = '300px';  // Adjust size as needed
+  img.style.margin = '10px';  // Add some margin for spacing
+  
+  document.body.appendChild(img); // Append to the body or any container
+}
