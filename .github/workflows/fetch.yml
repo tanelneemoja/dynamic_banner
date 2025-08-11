@@ -22,8 +22,7 @@ jobs:
         run: |
           npm init -y
           npm install axios
-          npm install puppeteer
 
       - name: Fetch website HTML
         run: |
-          node script.js
+          node fetchHtml.js
